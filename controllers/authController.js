@@ -32,6 +32,7 @@ exports.register = async (req, res) => {
     await sendVerificationEmail(user, verificationToken);
 
     res.status(201).json({
+      user,
       status: "success",
       msg: "Registration successful, check your email for verification link",
     });
@@ -68,16 +69,16 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ msg: " Email Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ msg: " Password Invalid credentials" });
     }
 
     if (!user.isVerified) {
