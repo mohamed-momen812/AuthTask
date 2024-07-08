@@ -1,29 +1,30 @@
-const mongoose = require("mongoose");
-const app = require("./app");
+const mongoose = require('mongoose');
 
-require("dotenv").config();
+const app = require('./app');
 
-// Handel UncaughtException (console.log(Undefined variable)) (Reference Errors)
-process.on("uncaughtException", (error) => {
-  console.error("uncaught Exception  Shuting down...");
+require('dotenv').config();
+
+//Handel UncaughtException (console.log(Undefined variable)) (Reference Errors)
+process.on('uncaughtException', (error) => {
+  console.error('uncaught Exception  Shuting down...');
   process.exit(1);
 });
 
 // Handel unhandledRejection
-process.on("unhandledRejection", (err) => {
-  console.error("Unhandeled Rejection  Shuting down...");
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandeled Rejection  Shuting down...');
   server.close(() => {
     process.exit(1);
   });
 });
 
 if (!process.env.DATABASE_PASSWORD) {
-  logger.error("DATABASE_PASSWORD environment variable is not defined");
+  console.error('DATABASE_PASSWORD environment variable is not defined');
   process.exit(1);
 }
 
 const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
+  '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
 
@@ -34,7 +35,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("DB Connection successful");
+    console.log('DB Connection successful');
 
     const port = process.env.PORT || 5000;
     server = app.listen(port, () => {
